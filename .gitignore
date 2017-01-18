@@ -1,0 +1,12 @@
+*~
+.DS_Stroe
+
+.settings
+.classpath
+.idea
+
+node_modules
+bower_components
+angular
+angular-ui-router
+dist

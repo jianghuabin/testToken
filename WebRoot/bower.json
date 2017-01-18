@@ -1,0 +1,20 @@
+{
+  "name": "WebRoot",
+  "homepage": "https://github.com/lsdFJUT/testToken",
+  "authors": [
+    "greyu <gre_yu@163.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
