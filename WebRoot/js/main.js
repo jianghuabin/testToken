@@ -13,17 +13,19 @@ $(function() {
         user.username = $('#username').val();
         user.password = $('#password').val();
         console.log(user);
-        var host = window.location.href;
+        var http = "http://"+window.location.host;
         $.ajax({
             type: "post",
-            url: host+"/servlet/signin",
+            url: http+"/testToken/servlet/signin",
             data: user,
+            dataType: 'json',
             success: function(message) {
+                console.log(message.status)
                 if( message.status == 1) {
-                    location.href = host + '/main';
+                    alert(111);
                 }
                 else {
-                    alert("登录失败"+result.msg);
+                    alert("登录失败"+message.msg);
                 }
             },
             error: function() {
