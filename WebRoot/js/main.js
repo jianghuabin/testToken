@@ -23,6 +23,7 @@ $(function() {
             success: function(message) {
                 console.log(message.status)
                 if( message.status == 1) {
+                    alert("登录成功");
                     sessionStorage.token = message.data.token;
                     $('.my-container').html(['<form class="form-horizontal" role="form" id="signin_form">',
 '    <div class="form-group header">',
@@ -67,8 +68,12 @@ $(function() {
                             dataType: "json",
                             success: function(message) {
                                 if(message.status == 1) {
-                                    alert("添加成功了");
-                                }else {
+                                    alert("添加成功");
+                                }else if(message.status == -1 && message.msg == "timeout") {
+                                    alert("您的登录已超时，请重新登录");
+                                    sessionStorage.removeItem("token");
+                                    window.location.href = http + "/testToken";
+                                } else {
                                     alert("添加失败");
                                 }
                             },
@@ -83,7 +88,7 @@ $(function() {
                     })
                 }
                 else {
-                    alert("登录失败"+message.msg);
+                    alert("登录失败："+message.msg);
                 }
             },
             error: function() {
