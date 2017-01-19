@@ -109,7 +109,7 @@ public class SigninServlet extends HttpServlet {
 				response.getWriter().write(json.toString());
 			}
 		}
-		if("set".equals(act)) {
+		if("check".equals(act)) {
 			System.out.println("--------------");
 			String token = null;
 			try {
@@ -121,11 +121,13 @@ public class SigninServlet extends HttpServlet {
 				System.out.println(json);
 //				response.setCharacterEncoding("text/html;charset=utf-8");
 				response.getWriter().write(json.toString());
+				return;
 			} catch(SignException e){
 				String json = JSONUtil.object2json(new Message(-1,"秘钥错误"));
 				System.out.println(json);
 //				response.setCharacterEncoding("text/html;charset=utf-8");
 				response.getWriter().write(json.toString());
+				return;
 			}
 			
 			
