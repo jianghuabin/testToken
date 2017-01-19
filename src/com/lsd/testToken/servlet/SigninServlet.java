@@ -1,7 +1,10 @@
 package com.lsd.testToken.servlet;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lsd.testToken.util.Auth;
 import com.lsd.testToken.util.JSONUtil;
 import com.lsd.testToken.util.Message;
 
@@ -43,19 +47,7 @@ public class SigninServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-		out.println("<HTML>");
-		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
-		out.println("  <BODY>");
-		out.print("    This is ");
-		out.print(this.getClass());
-		out.println(", using the GET method");
-		out.println("  </BODY>");
-		out.println("</HTML>");
-		out.flush();
-		out.close();
+		this.doPost(request, response);
 	}
 
 	/**
@@ -70,22 +62,54 @@ public class SigninServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		String act = request.getParameter("act");
-		System.out.println(act);
+		//System.out.println(act);
 		Message message = new Message(1,"ok");
 		if("signin".equals(act)) {
 			Map<String,Object> claims = new HashMap<String,Object>();
-			claims.put("token","111523");
-			message.setData(claims);
-			String json = JSONUtil.object2json(message);
-			System.out.println(json);
-//			response.setCharacterEncoding("text/html;charset=utf-8");
-			response.getWriter().write(json.toString());
+			//System.out.println(request.getParameter("username"));
+			if(!"admin".equals(request.getParameter("username"))){
+				message = new Message(-1, "用户名错误");
+				String json = JSONUtil.object2json(message);
+				System.out.println(json);
+//				response.setCharacterEncoding("text/html;charset=utf-8");
+				response.getWriter().write(json.toString());
+			}
+			else if(!"111111".equals(request.getParameter("password")))
+			{
+				//System.out.println(request.getParameter("passwrod"));
+				message = new Message(-1, "密码错误");
+				String json = JSONUtil.object2json(message);
+				System.out.println(json);
+//				response.setCharacterEncoding("text/html;charset=utf-8");
+				response.getWriter().write(json.toString());
+			}
+			else
+			{
+				claims.put("id", 314190001);
+				claims.put("username", request.getParameter("username"));
+				claims.put("password",request.getParameter("passwrod"));
+				claims.put("role","teacher");
+				
+				String s = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, Auth.key).setExpiration(new Date(System.currentTimeMillis()+Auth.expire)).compact();
+				claims.put("token",s);
+				message.setData(claims);
+				claims.put("token",request.getParameter("passwrod"));
+				message.setData(claims);
+				String json = JSONUtil.object2json(message);
+				System.out.println(json);
+//				response.setCharacterEncoding("text/html;charset=utf-8");
+				response.getWriter().write(json.toString());
+			}
 		}
 		if("set".equals(act)) {
 			System.out.println("--------------");
 			String token = request.getHeader("Authorization");
+			
 			System.out.println("token在这"+token);
+			
 			Map<String,Object> claims = new HashMap<String,Object>();
 			String json = JSONUtil.object2json(message);
 			System.out.println(json);
