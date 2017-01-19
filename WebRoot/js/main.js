@@ -4,10 +4,8 @@ $(function() {
         username: "",
         password: ""
     }
-    var info = {
-        act: "set",
-        telephone: "",
-        nickname: ""
+    var check = {
+        act: "check"
     }
     var signinBtn = $("#signin");
     signinBtn.on('click', function() {
@@ -27,48 +25,32 @@ $(function() {
                     sessionStorage.token = message.data.token;
                     $('.my-container').html(['<form class="form-horizontal" role="form" id="signin_form">',
 '    <div class="form-group header">',
-'        <h1>Set</h1>',
+'        <h2>Hi,Nice to meet you</h2>',
 '    </div>',
 '    <div class="form-group">',
-'        <label for="telephone" class="col-sm-2 control-label">Telephone</label>',
-'        <div class="col-sm-10">',
-'            <input type="text" class="form-control" id="telephone" placeholder="Telephone">',
-'        </div>',
-'    </div>',
-'    <div class="form-group">',
-'        <label for="nickname" class="col-sm-2 control-label">Nickname</label>',
-'        <div class="col-sm-10">',
-'          <input type="text" class="form-control" id="nickname" placeholder="Nickname">',
+'        <div class="col-sm-offset-2 col-sm-10">',
+'          <button type="button" id="token" class="btn btn-primary">check token</button>',
 '        </div>',
 '    </div>',
 '    <div class="form-group">',
 '        <div class="col-sm-offset-2 col-sm-10">',
-'          <button type="button" id="set" class="btn btn-default">Set</button>',
-'        </div>',
-'    </div>',
-'    <div class="form-group">',
-'        <div class="col-sm-offset-2 col-sm-10">',
-'          <button type="button" id="signout" class="btn btn-default">Sign out</button>',
+'          <button type="button" id="signout" class="btn btn-danger">signout</button>',
 '        </div>',
 '    </div>',
 '</form>'].join(""));
-                    $('#set').bind('click','li',function() {
-                        alert(555);
-                        info.telephone = $('#telephone').val();
-                        info.nickname = $('#nickname').val();
+                    $('#token').bind('click','li',function() {
                         var token = sessionStorage.token;
-                        console.log(info);
                         $.ajax({
                             type: "post",
                             url: http+"/testToken/servlet/signin",
-                            data: info,
+                            data: check,
                             headers: {
                                 "Authorization": token
                             },
                             dataType: "json",
                             success: function(message) {
                                 if(message.status == 1) {
-                                    alert("添加成功");
+                                    alert("设置成功");
                                 }else if(message.status == -1 && message.msg == "timeout") {
                                     alert("您的登录已超时，请重新登录");
                                     sessionStorage.removeItem("token");
