@@ -27,19 +27,19 @@ public class Token {
             Claims claims = Jwts.parser().setSigningKey(Auth.key).parseClaimsJws(token).getBody();
             System.out.println(claims.toString());
             this.id = Integer.parseInt(claims.get("id").toString());
-            this.name = claims.get("name").toString();
+            //this.name = claims.get("name").toString();
             this.role = claims.get("role").toString();
             System.out.println("================验证成功=================");
         } catch (ExpiredJwtException e){
             this.err = ExpiredJwtError;
             e.printStackTrace();
             System.out.println("===========超时============");
-            throw new ExpiredException("timeOut"); 
+            throw new ExpiredException("timeout"); 
         } catch (SignatureException e) {
             this.err = SignatureError;
             e.printStackTrace();
             System.out.println("================秘钥错误============");
-            throw new SignException("timeOut");
+            throw new SignException("秘钥错误");
         }
     }
 

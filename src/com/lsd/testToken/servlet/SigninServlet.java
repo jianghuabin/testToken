@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import com.lsd.testToken.exception.SignException;
 import com.lsd.testToken.util.Auth;
 import com.lsd.testToken.util.JSONUtil;
 import com.lsd.testToken.util.Message;
+import com.lsd.testToken.util.Token;
 
 public class SigninServlet extends HttpServlet {
 
@@ -104,7 +106,9 @@ public class SigninServlet extends HttpServlet {
 				data.put("role", "teacher");
 				
 				message.setData(data);
-
+				Cookie c1 = new Cookie("token",s);
+				response.addCookie(c1);
+				response.setHeader("Authorization", s);
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
 			  //response.setCharacterEncoding("text/html;charset=utf-8");
@@ -113,13 +117,13 @@ public class SigninServlet extends HttpServlet {
 		}
 		if("check".equals(act)) {
 			System.out.println("--------------");
-			String token = null;
+			Token token = null;
 			try {
-				token = request.getHeader("Authorization");
+				token = new Token(request.getHeader("Authorization"));
 			} catch (ExpiredException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				String json = JSONUtil.object2json(new Message(-1,"timeOut"));
+				String json = JSONUtil.object2json(new Message(-1,"timeout"));
 				System.out.println(json);
 //				response.setCharacterEncoding("text/html;charset=utf-8");
 				response.getWriter().write(json.toString());
@@ -133,9 +137,9 @@ public class SigninServlet extends HttpServlet {
 			}
 			
 			
-			System.out.println("token在这"+token);
+			//System.out.println("token在这"+token);
 			
-			Map<String,Object> claims = new HashMap<String,Object>();	
+			//Map<String,Object> claims = new HashMap<String,Object>();	
 			String json = JSONUtil.object2json(message);
 			System.out.println(json);
 //			response.setCharacterEncoding("text/html;charset=utf-8");
