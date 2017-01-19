@@ -70,16 +70,28 @@ public class SigninServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		System.out.println(username);
-		System.out.println(password);
+		String act = request.getParameter("act");
+		System.out.println(act);
 		Message message = new Message(1,"ok");
-		Map<String,Object> claims = new HashMap<String,Object>();
-		String json = JSONUtil.object2json(message);
-		System.out.println(json);
-//		response.setCharacterEncoding("text/html;charset=utf-8");
-		response.getWriter().write(json.toString());
+		if("signin".equals(act)) {
+			Map<String,Object> claims = new HashMap<String,Object>();
+			claims.put("token","111523");
+			message.setData(claims);
+			String json = JSONUtil.object2json(message);
+			System.out.println(json);
+//			response.setCharacterEncoding("text/html;charset=utf-8");
+			response.getWriter().write(json.toString());
+		}
+		if("set".equals(act)) {
+			System.out.println("--------------");
+			String token = request.getHeader("Authorization");
+			System.out.println("token在这"+token);
+			Map<String,Object> claims = new HashMap<String,Object>();
+			String json = JSONUtil.object2json(message);
+			System.out.println(json);
+//			response.setCharacterEncoding("text/html;charset=utf-8");
+			response.getWriter().write(json.toString());
+		}
 	}
 
 	/**
