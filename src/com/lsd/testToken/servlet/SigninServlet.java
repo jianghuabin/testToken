@@ -102,12 +102,9 @@ public class SigninServlet extends HttpServlet {
 				//System.out.println(s);
 				
 				Map<String,Object> data = new HashMap<String,Object>();
-				data.put("token", s);
 				data.put("role", "teacher");
-				
 				message.setData(data);
-				Cookie c1 = new Cookie("token",s);
-				response.addCookie(c1);
+				//把token放在reponse header里
 				response.setHeader("Authorization", s);
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
