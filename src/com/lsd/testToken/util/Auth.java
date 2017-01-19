@@ -17,7 +17,7 @@ import java.util.Map;
 public class Auth {
 
     public static final Key key = MacProvider.generateKey();
-    public static final long expire = 7200000; //2 hours
+    public static final long expire = 30000; //2 hours
 
     public static void main (String [] args) {
         Map<String,Object> claims = new HashMap<String, Object>();
