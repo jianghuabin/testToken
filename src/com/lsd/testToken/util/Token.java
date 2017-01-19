@@ -7,6 +7,9 @@ import io.jsonwebtoken.SignatureException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.lsd.testToken.exception.ExpiredException;
+import com.lsd.testToken.exception.SignException;
+
 /**
  * Created by fangf on 2016/5/22.
  */
@@ -29,10 +32,14 @@ public class Token {
             System.out.println("================验证成功=================");
         } catch (ExpiredJwtException e){
             this.err = ExpiredJwtError;
+            e.printStackTrace();
             System.out.println("===========超时============");
+            throw new ExpiredException("timeOut"); 
         } catch (SignatureException e) {
             this.err = SignatureError;
+            e.printStackTrace();
             System.out.println("================秘钥错误============");
+            throw new SignException("timeOut");
         }
     }
 
