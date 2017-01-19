@@ -96,8 +96,6 @@ public class SigninServlet extends HttpServlet {
 				String s = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, Auth.key).setExpiration(new Date(System.currentTimeMillis()+Auth.expire)).compact();
 				claims.put("token",s);
 				message.setData(claims);
-				claims.put("token",request.getParameter("passwrod"));
-				message.setData(claims);
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
 //				response.setCharacterEncoding("text/html;charset=utf-8");
