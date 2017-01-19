@@ -50,7 +50,7 @@ $(function() {
                             dataType: "json",
                             success: function(message) {
                                 if(message.status == 1) {
-                                    alert("设置成功");
+                                    alert("验证成功，您的token是正确的");
                                 }else if(message.status == -1 && message.msg == "timeout") {
                                     alert("您的登录已超时，请重新登录");
                                     sessionStorage.removeItem("token");
