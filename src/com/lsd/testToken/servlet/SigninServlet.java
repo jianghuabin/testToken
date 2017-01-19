@@ -96,6 +96,7 @@ public class SigninServlet extends HttpServlet {
 				claims.put("role","teacher");
 				
 				String s = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, Auth.key).setExpiration(new Date(System.currentTimeMillis()+Auth.expire)).compact();
+
 				//System.out.println(s);
 				
 				Map<String,Object> data = new HashMap<String,Object>();
@@ -103,6 +104,7 @@ public class SigninServlet extends HttpServlet {
 				data.put("role", "teacher");
 				
 				message.setData(data);
+
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
 			  //response.setCharacterEncoding("text/html;charset=utf-8");
