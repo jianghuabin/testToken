@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -105,7 +106,9 @@ public class SigninServlet extends HttpServlet {
 				data.put("role", "teacher");
 				
 				message.setData(data);
-
+				Cookie c1 = new Cookie("token",s);
+				response.addCookie(c1);
+				response.setHeader("Authorization", s);
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
 			  //response.setCharacterEncoding("text/html;charset=utf-8");

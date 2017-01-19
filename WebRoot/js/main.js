@@ -11,18 +11,16 @@ $(function() {
     signinBtn.on('click', function() {
         user.username = $('#username').val();
         user.password = $('#password').val();
-        console.log(user);
         var http = "http://"+window.location.host;
         $.ajax({
             type: "post",
             url: http+"/testToken/servlet/signin",
             data: user,
             dataType: 'json',
-            success: function(message) {
-                console.log(message.status)
+            success: function(message,textStatus,xhr) {
                 if( message.status == 1) {
                     alert("登录成功");
-                    sessionStorage.token = message.data.token;
+                    sessionStorage.token = xhr.getResponseHeader("Authorization");
                     $('.my-container').html(['<form class="form-horizontal" role="form" id="signin_form">',
 '    <div class="form-group header">',
 '        <h2>Hi,Nice to meet you</h2>',
