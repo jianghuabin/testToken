@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lsd.testToken.exception.ExpiredException;
+import com.lsd.testToken.exception.SignException;
 import com.lsd.testToken.util.Auth;
 import com.lsd.testToken.util.JSONUtil;
 import com.lsd.testToken.util.Message;
@@ -79,7 +81,7 @@ public class SigninServlet extends HttpServlet {
 			}
 			else if(!"111111".equals(request.getParameter("password")))
 			{
-				//System.out.println(request.getParameter("passwrod"));
+				System.out.println(request.getParameter("passwrod"));
 				message = new Message(-1, "密码错误");
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
@@ -90,25 +92,50 @@ public class SigninServlet extends HttpServlet {
 			{
 				claims.put("id", 314190001);
 				claims.put("username", request.getParameter("username"));
-				claims.put("password",request.getParameter("passwrod"));
+				claims.put("password",request.getParameter("password"));
 				claims.put("role","teacher");
 				
 				String s = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, Auth.key).setExpiration(new Date(System.currentTimeMillis()+Auth.expire)).compact();
-				claims.put("token",s);
-				message.setData(claims);
+
+				//System.out.println(s);
+				
+				Map<String,Object> data = new HashMap<String,Object>();
+				data.put("token", s);
+				data.put("role", "teacher");
+				
+				message.setData(data);
+
 				String json = JSONUtil.object2json(message);
 				System.out.println(json);
-//				response.setCharacterEncoding("text/html;charset=utf-8");
+			  //response.setCharacterEncoding("text/html;charset=utf-8");
 				response.getWriter().write(json.toString());
 			}
 		}
-		if("set".equals(act)) {
+		if("check".equals(act)) {
 			System.out.println("--------------");
-			String token = request.getHeader("Authorization");
+			String token = null;
+			try {
+				token = request.getHeader("Authorization");
+			} catch (ExpiredException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				String json = JSONUtil.object2json(new Message(-1,"timeOut"));
+				System.out.println(json);
+//				response.setCharacterEncoding("text/html;charset=utf-8");
+				response.getWriter().write(json.toString());
+				return;
+			} catch(SignException e){
+				String json = JSONUtil.object2json(new Message(-1,"秘钥错误"));
+				System.out.println(json);
+//				response.setCharacterEncoding("text/html;charset=utf-8");
+				response.getWriter().write(json.toString());
+				return;
+			}
+			
 			
 			System.out.println("token在这"+token);
 			
-			Map<String,Object> claims = new HashMap<String,Object>();
+			Map<String,Object> claims = new HashMap<String,Object>();	
 			String json = JSONUtil.object2json(message);
 			System.out.println(json);
 //			response.setCharacterEncoding("text/html;charset=utf-8");
